@@ -7,7 +7,7 @@ app.use(express.json());
 
 // Create users table if it doesn't exist
 const createTableQuery = `
-  CREATE TABLE IF NOT EXISTS practice1 (
+  CREATE TABLE IF NOT EXISTS users (
     id INT AUTO_INCREMENT PRIMARY KEY,
     firstName VARCHAR(255),
     age INT,
@@ -25,7 +25,7 @@ connection.query(createTableQuery, (err) => {
 });
 
 app.get("/", (req, res) => {
-  res.send({ msg: "hello from practice1" });
+  res.send({ msg: "hello from ankush" });
 });
 
 // Route to add a new user
@@ -37,7 +37,7 @@ app.post("/adduser", (req, res) => {
   }
 
   const query =
-    "INSERT INTO practice1 (firstName, age, city, email, phone) VALUES (?, ?, ?, ?, ?)";
+    "INSERT INTO users (firstName, age, city, email, phone) VALUES (?, ?, ?, ?, ?)";
 
   connection.query(
     query,
@@ -58,7 +58,7 @@ app.post("/adduser", (req, res) => {
 
 // Route to get all users
 app.get("/get-data", (req, res) => {
-  const query = "SELECT * FROM practice1";
+  const query = "SELECT * FROM users";
 
   connection.query(query, (err, results) => {
     if (err) {
@@ -79,7 +79,7 @@ app.delete("/deleteuser/:id", (req, res) => {
   if (!userId) {
     return res.status(400).json({ error: "User ID is required." });
   }
-  const deleteQuery = "DELETE FROM practice1 WHERE id = ?";
+  const deleteQuery = "DELETE FROM users WHERE id = ?";
 
   connection.query(deleteQuery, [userId], (err, results) => {
     if (err) {
@@ -96,7 +96,6 @@ app.delete("/deleteuser/:id", (req, res) => {
 });
 
 app.listen(process.env.PORT, async () => {
-  // console.log("practice1",connection)
   try {
     await connection.connect();
     console.log(`server is running on port ${process.env.PORT}`);
